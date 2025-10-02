@@ -3,12 +3,12 @@ from pymongo import MongoClient
 import yfinance as yf
 from datetime import datetime, timedelta
 
-def insertStock(ticker, years=4):
 
+def insertStock(ticker, years=5):
     # Checking if the ticket is valid
     try:
         end_date = datetime.today()
-        start_date = end_date - timedelta(days=years * 365)
+        start_date = end_date - timedelta(days=years * 365 + 200)  # Adding 200 days to fix the SMA's time gaps
         data = yf.download(ticker, start=start_date, end=end_date)
     except:
         print("Stock didn't found")
@@ -47,10 +47,12 @@ def insertStock(ticker, years=4):
     if isinstance(data.columns, pd.MultiIndex):
         data.columns = [col[0] if col[0] != '' else col[1] for col in data.columns]
 
+    # Fixes Nan or Null Values:
+    data = data.dropna()
+
     # Now convert to records
     data.reset_index(inplace=True)  # Ensure 'Date' is a column
     records = data.to_dict("records")
-
 
     # Adding the data to the Stocks DB
     uri = "mongodb+srv://Shakargi:Avsh0549507881@stocktracker.wru2yc0.mongodb.net/?retryWrites=true&w=majority&appName=StockTracker"
@@ -64,11 +66,3 @@ def insertStock(ticker, years=4):
     collection.insert_many(records)
 
     client.close()
-
-
-
-
-
-
-
-
