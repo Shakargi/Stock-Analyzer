@@ -53,6 +53,3 @@ def RegressionModelRandomForest(ticker: str, years=5):
     plt.show()
 
     client.close()
-
-
-RegressionModelRandomForest("AAPL")
