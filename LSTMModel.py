@@ -7,7 +7,6 @@ from sklearn.preprocessing import MinMaxScaler
 from keras.layers import Dense, Dropout, LSTM
 from keras.models import Sequential
 from keras.callbacks import EarlyStopping
-import matplotlib.pyplot as plt
 
 
 def RegressionModel(ticker: str, years=5, windowSize=60):
@@ -57,17 +56,14 @@ def RegressionModel(ticker: str, years=5, windowSize=60):
     model.compile(optimizer='adam', loss='mean_squared_error')
     es = EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True)  # EarlyStopping: Regularization
     # tool to stop the training when there's no progress
-    model.fit(x_train, y_train, validation_data=(x_test, y_test), epochs=10, batch_size=16, callbacks=[es],
+    model.fit(x_train, y_train, validation_data=(x_test, y_test), epochs=20, batch_size=16, callbacks=[es],
               shuffle=False)
 
     # Un-Scaling and making predictions
     yPred = close_scaler.inverse_transform(model.predict(x_test))
     y_test_orig = close_scaler.inverse_transform(y_test)
 
-
-    ## Printing the results
-
-    # Prepare full axis for plotting
+    # Prepare full axis
     full_prices = df['Close'].values
     full_axis = np.arange(len(full_prices))
 
@@ -75,20 +71,5 @@ def RegressionModel(ticker: str, years=5, windowSize=60):
     test_start_idx = len(df) - len(y_test_orig)
     test_axis = np.arange(test_start_idx, len(df))
 
-    plt.figure(figsize=(14, 6))
-    # Plot full historical prices
-    plt.plot(full_axis, full_prices, color='gray', alpha=0.5, label='Historical Prices')
-
-    # Plot true test values
-    plt.plot(test_axis, y_test_orig.flatten(), color='b', label='Test True Values')
-
-    # Plot predictions
-    plt.plot(test_axis, yPred.flatten(), color='r', label='Test Predictions')
-
-    plt.title(f"{ticker} Stock Price Prediction")
-    plt.xlabel("Time")
-    plt.ylabel("Price")
-    plt.legend()
-    plt.show()
-
     client.close()
+    return full_axis, full_prices, test_axis, y_test_orig, yPred, df
