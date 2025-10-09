@@ -13,6 +13,10 @@ The app connects to **MongoDB** for historical data and runs a custom **LSTM mod
 
 
 
+
+
+
+
 How to Run:
 
 Make sure the file app.py is in your project folder.
@@ -25,11 +29,26 @@ streamlit run app.py
 Open the URL shown in your terminal (usually http://localhost:8501) in your browser.
 
 
+
+
+
+
+
+
+
+
 File Structure:
 
 app.py              # Main Streamlit app with integrated LSTM model
 LSTMModel.py        # Contains the RegressionModel function
 DataBase.py         # Module for inserting and managing stock data in MongoDB
+
+
+
+
+
+
+
 
 
 Streamlit Interface:
@@ -41,6 +60,15 @@ Number of Years: Choose how many years of historical data to analyze
 Window Size: Number of days for LSTM input sequences
 
 Click "Run Forecast" to see the predicted vs. actual stock prices.
+
+
+
+
+
+
+
+
+
 
 
 
