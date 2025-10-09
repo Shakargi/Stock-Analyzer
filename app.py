@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import warnings
 from LSTMModel import RegressionModel
 
-## To Run the program, enter the command - streamlit run app.py
+## To Run the program, enter this command in the terminal: streamlit run app.py
 warnings.filterwarnings("ignore")
 
 st.set_page_config(page_title="StockTracker Demo", layout="wide")
